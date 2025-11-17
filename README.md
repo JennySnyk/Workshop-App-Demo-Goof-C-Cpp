@@ -15,7 +15,7 @@ This is a **DELIBERATELY VULNERABLE** C++ application created for security demon
 This repository demonstrates:
 
 * **SAST Vulnerabilities**: 12+ examples of common C/C++ security issues based on OWASP Top 10 and CWE
-* **SCA Vulnerabilities**: Dependencies with known vulnerabilities (via Conan package manager)
+* **SCA Vulnerabilities**: Vulnerable open-source C/C++ libraries (OpenSSL, zlib, libcurl) scanned via `--unmanaged`
 * **Container Vulnerabilities**: Dockerfiles using vulnerable base images and insecure configurations
 * **IaC Misconfigurations**: Terraform files with common cloud security flaws
 
@@ -48,9 +48,9 @@ Select a vulnerability to demonstrate:
 
 - **C++ Compiler**: GCC 7+ or Clang 6+
 - **CMake**: Version 3.10 or higher
-- **Conan** (optional): For dependency management
 - **Docker** (optional): For containerized demos
 - **Terraform** (optional): For IaC scanning demos
+- **Snyk CLI**: For security scanning (see [Scanning with Snyk](#-scanning-with-snyk))
 
 ### Installation & Running
 
@@ -74,27 +74,7 @@ make
 ./goof-server
 ```
 
-#### Option 2: Using Conan for Dependency Management
-
-```bash
-# Install Conan if not already installed
-pip install conan
-
-# Install dependencies
-mkdir build && cd build
-conan install .. --build=missing
-
-# Configure and build
-cmake .. -DCMAKE_BUILD_TYPE=Release
-make
-
-# Run the application
-./goof-server
-```
-
-**Note for Snyk Scanning**: The repository includes both `conanfile.txt` and `conanfile.py` formats. Snyk Open Source supports scanning Conan dependencies. Make sure to run `snyk test --file=conanfile.txt` or `snyk test --file=conanfile.py` from the project root directory.
-
-#### Option 3: Using Docker
+#### Option 2: Using Docker
 
 ```bash
 # Build the Docker image
@@ -312,6 +292,8 @@ This downloads real vulnerable library source to `deps/` directory:
 - ✅ **11 Low** - Race conditions, missing validation
 
 For more details, see [deps/README.md](deps/README.md) and the [Snyk C/C++ Troubleshooting Guide](https://docs.snyk.io/supported-languages/supported-languages-list/c-c++/troubleshooting-c-c++-for-open-source).
+
+**Note about Conan files**: This repository includes `conanfile.txt` and `conanfile.py` for reference/educational purposes only. These files list vulnerable dependencies but are **NOT used for Snyk scanning**. Snyk C/C++ scanning uses `--unmanaged` which scans actual source code files, not package manager manifests.
 
 ### Snyk Container
 
