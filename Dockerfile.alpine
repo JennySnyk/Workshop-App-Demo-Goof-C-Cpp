@@ -1,0 +1,34 @@
+# Alternative Dockerfile using Alpine (also with vulnerabilities)
+# Deliberately using an OLD version for demonstration
+FROM alpine:3.12
+
+# Vulnerable: Running as root
+USER root
+
+# Install build dependencies
+RUN apk add --no-cache \
+    g++ \
+    cmake \
+    make \
+    openssl-dev \
+    curl-dev
+
+# Vulnerable: No user creation, running as root
+WORKDIR /app
+COPY . /app
+
+# Build the application
+RUN mkdir -p build && cd build && \
+    cmake .. && \
+    make
+
+# Vulnerable: Exposing multiple ports unnecessarily
+EXPOSE 8080 9090
+
+# Vulnerable: Using environment variables with sensitive data
+ENV DB_PASSWORD=admin123
+ENV API_KEY=sk_live_1234567890abcdef
+
+# Run the application as root (vulnerable)
+CMD ["./build/goof-server"]
+

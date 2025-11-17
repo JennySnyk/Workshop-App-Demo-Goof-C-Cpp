@@ -1,0 +1,15 @@
+[requires]
+# Using older versions with known vulnerabilities for demonstration
+# These are examples - adjust based on actual vulnerable versions available
+openssl/1.1.1k
+zlib/1.2.11
+libcurl/7.74.0
+
+[generators]
+cmake
+cmake_find_package
+
+[options]
+openssl:shared=False
+libcurl:shared=False
+

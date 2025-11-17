@@ -1,0 +1,16 @@
+
+   _____ ____   ____  ______   ______ __  __
+  / ____|  _ \ / __ \|  ____| / ____/  \/  |
+ | |  __| |_) | |  | | |__   | |   _| \  / |
+ | | |_ |  _ <| |  | |  __|  | |  | | |\/| |
+ | |__| | |_) | |__| | |     | |__| | |  | |
+  \_____|____/ \____/|_|      \_____|_|  |_|
+
+  Workshop App Demo - Goof (C++ Edition)
+  DELIBERATELY VULNERABLE APPLICATION
+  For Security Training Only
+
+  ⚠️  WARNING: Contains intentional security flaws
+  🚫 DO NOT deploy in production
+  📚 Educational purposes only
+

@@ -1,0 +1,84 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-linux:
+    name: Build on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y g++ cmake make libssl-dev libcurl4-openssl-dev
+      
+      - name: Create build directory
+        run: mkdir build
+      
+      - name: Configure CMake
+        run: cd build && cmake ..
+      
+      - name: Build
+        run: cd build && make
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: goof-server-linux
+          path: build/goof-server
+
+  build-macos:
+    name: Build on macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Install dependencies
+        run: |
+          brew install cmake openssl curl
+      
+      - name: Create build directory
+        run: mkdir build
+      
+      - name: Configure CMake
+        run: cd build && cmake ..
+      
+      - name: Build
+        run: cd build && make
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: goof-server-macos
+          path: build/goof-server
+
+  build-windows:
+    name: Build on Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup MSVC
+        uses: microsoft/setup-msbuild@v1
+      
+      - name: Create build directory
+        run: mkdir build
+      
+      - name: Configure CMake
+        run: cd build && cmake .. -G "Visual Studio 17 2022"
+      
+      - name: Build
+        run: cd build && cmake --build . --config Release
+      
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: goof-server-windows
+          path: build/Release/goof-server.exe
+

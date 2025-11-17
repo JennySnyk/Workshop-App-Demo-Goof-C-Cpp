@@ -1,0 +1,26 @@
+# Snyk (https://snyk.io) policy file
+
+# This is an example .snyk file for the vulnerable C++ application
+# In a real application, you would use this to ignore false positives
+# or apply patches. Since this is intentionally vulnerable, we don't
+# want to ignore the findings!
+
+# To ignore specific vulnerabilities (example - don't use for this repo):
+# ignore:
+#   SNYK-CPP-OPENSSL-123456:
+#     - '*':
+#         reason: Accepted risk for demo purposes
+#         expires: 2025-12-31T00:00:00.000Z
+
+version: v1.22.0
+
+# Patch configuration (example)
+# patch: {}
+
+# Exclude paths from scanning (example)
+# exclude:
+#   code:
+#     - tests/
+#   global:
+#     - '*.md'
+
