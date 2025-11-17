@@ -49,10 +49,21 @@ echo ""
 echo "🔍 Running Snyk Open Source (SCA) scan..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 if [ -f "conanfile.txt" ]; then
-    snyk test --file=conanfile.txt --json > scan-results/sca-scan.json || true
-    snyk test --file=conanfile.txt
-else
-    echo "⚠️  No conanfile.txt found, skipping SCA scan"
+    echo "Scanning conanfile.txt..."
+    snyk test --file=conanfile.txt --json > scan-results/sca-conanfile-txt.json || true
+    snyk test --file=conanfile.txt || true
+    echo ""
+fi
+
+if [ -f "conanfile.py" ]; then
+    echo "Scanning conanfile.py..."
+    snyk test --file=conanfile.py --json > scan-results/sca-conanfile-py.json || true
+    snyk test --file=conanfile.py || true
+    echo ""
+fi
+
+if [ ! -f "conanfile.txt" ] && [ ! -f "conanfile.py" ]; then
+    echo "⚠️  No conanfile.txt or conanfile.py found, skipping SCA scan"
 fi
 echo ""
 

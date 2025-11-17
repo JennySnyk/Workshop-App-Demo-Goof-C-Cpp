@@ -92,6 +92,8 @@ make
 ./goof-server
 ```
 
+**Note for Snyk Scanning**: The repository includes both `conanfile.txt` and `conanfile.py` formats. Snyk Open Source supports scanning Conan dependencies. Make sure to run `snyk test --file=conanfile.txt` or `snyk test --file=conanfile.py` from the project root directory.
+
 #### Option 3: Using Docker
 
 ```bash
@@ -232,36 +234,57 @@ Unsynchronized access to shared resources.
 
 ## 🔍 Scanning with Snyk
 
-### Snyk Code (SAST)
-
-Scan the source code for security vulnerabilities:
+### Prerequisites for Snyk Scanning
 
 ```bash
 # Install Snyk CLI
 npm install -g snyk
 
+# Or via Homebrew
+brew install snyk
+
 # Authenticate
 snyk auth
-
-# Scan for code vulnerabilities
-snyk code test
 ```
 
-Expected findings: Buffer overflow, format string, command injection, SQL injection, etc.
+### Snyk Code (SAST)
+
+Scan the source code for security vulnerabilities:
+
+```bash
+# Scan for code vulnerabilities
+snyk code test
+
+# Generate JSON report
+snyk code test --json > sast-results.json
+```
+
+**Expected findings**: Buffer overflow, format string, command injection, SQL injection, use-after-free, null pointer dereference, memory leaks, hardcoded credentials, and more.
 
 ### Snyk Open Source (SCA)
 
 Scan dependencies for known vulnerabilities:
 
 ```bash
-# Scan C++ dependencies
+# Scan C++ dependencies (Conan)
 snyk test --file=conanfile.txt
 
+# Or scan with conanfile.py
+snyk test --file=conanfile.py
+
 # Monitor project
-snyk monitor
+snyk monitor --file=conanfile.txt
 ```
 
-Expected findings: Vulnerabilities in OpenSSL, libcurl, and other dependencies.
+**Expected findings**: This project uses intentionally vulnerable versions with known CVEs:
+
+- **OpenSSL 1.0.1t**: Heartbleed (CVE-2014-0160), CVE-2016-2105, CVE-2016-2106, and more
+- **zlib 1.2.8**: CVE-2016-9840, CVE-2016-9841, CVE-2016-9842, CVE-2016-9843
+- **libcurl 7.58.0**: Multiple security vulnerabilities including CVE-2018-1000120, CVE-2018-1000121
+- **Boost 1.69.0**: Known security issues
+- **SQLite 3.16.0**: Multiple CVEs
+- **libxml2 2.9.4**: XXE vulnerabilities and other CVEs
+- **JsonCpp 1.8.4**: Potential security issues
 
 ### Snyk Container
 
