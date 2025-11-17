@@ -72,6 +72,11 @@ terraform/terraform.tfvars
 files/
 *.log
 
+# Downloaded vulnerable libraries (users download these via script)
+# Ignore everything in deps/ except README.md
+deps/*
+!deps/README.md
+
 # System files
 Thumbs.db
 desktop.ini

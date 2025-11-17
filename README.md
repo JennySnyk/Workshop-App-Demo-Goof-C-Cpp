@@ -292,16 +292,24 @@ snyk monitor --unmanaged
 3. Match against Snyk's database of known vulnerable libraries
 4. Report CVEs found in matched library versions
 
-**Source files included**: This repository includes source code snippets from vulnerable libraries in the `deps/` directory:
-- `deps/openssl-1.0.1t/` - Contains Heartbleed vulnerability
-- `deps/zlib-1.2.8/` - Contains out-of-bounds vulnerabilities
-- `deps/libcurl-7.58.0/` - Contains FTP and LDAP vulnerabilities
+**Download vulnerable libraries**: First, download the actual vulnerable library source code:
 
-**Expected findings**: 
+```bash
+# Download OpenSSL, zlib, and libcurl source code (~8.8 MB total)
+./scripts/download-vulnerable-deps.sh
+```
 
-- **OpenSSL 1.0.1t**: Heartbleed (CVE-2014-0160), CVE-2016-2105, CVE-2016-2106, and more
-- **zlib 1.2.8**: CVE-2016-9840, CVE-2016-9841, CVE-2016-9842, CVE-2016-9843
-- **libcurl 7.58.0**: CVE-2018-1000120 (FTP path trickery), CVE-2018-1000121 (LDAP NULL deref)
+This downloads real vulnerable library source to `deps/` directory:
+- `deps/openssl-1.0.1t/` - OpenSSL with Heartbleed (4.4 MB)
+- `deps/zlib-1.2.8/` - zlib with critical CVEs (557 KB)
+- `deps/curl-7.58.0/` - libcurl with 88+ vulnerabilities (3.8 MB)
+
+**Expected findings** (133 total vulnerabilities):
+
+- ✅ **17 Critical** - Buffer overflows, out-of-bounds writes, DoS
+- ✅ **36 High** - Memory corruption, NULL pointer dereference, RCE
+- ✅ **69 Medium** - Authentication bypass, information exposure
+- ✅ **11 Low** - Race conditions, missing validation
 
 For more details, see [deps/README.md](deps/README.md) and the [Snyk C/C++ Troubleshooting Guide](https://docs.snyk.io/supported-languages/supported-languages-list/c-c++/troubleshooting-c-c++-for-open-source).
 

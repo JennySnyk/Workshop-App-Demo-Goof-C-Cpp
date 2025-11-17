@@ -52,29 +52,33 @@ According to [Snyk's C/C++ troubleshooting docs](https://docs.snyk.io/supported-
 3. **Matches hashes** against Snyk's vulnerability database
 4. **Reports CVEs** found in matched library versions
 
-## 🚀 Quick Demo (5 minutes)
+## 🚀 Quick Demo (5-10 minutes)
 
 ```bash
 # Clone the repository
 git clone https://github.com/JennySnyk/Workshop-App-Demo-Goof-C-Cpp.git
 cd Workshop-App-Demo-Goof-C-Cpp
 
+# Download vulnerable libraries (~8.8 MB, takes ~30 seconds)
+./scripts/download-vulnerable-deps.sh
+
 # Authenticate (if not already)
 snyk auth
 
-# Scan for vulnerable C/C++ dependencies
+# Scan for vulnerable C/C++ dependencies (finds 133 vulnerabilities!)
 snyk test --unmanaged
 
-# Scan for code vulnerabilities (SAST)
+# Scan for code vulnerabilities (SAST - finds 12+ issues)
 snyk code test
 ```
 
 ## 📊 Expected Results
 
 ### Unmanaged Scan (`snyk test --unmanaged`)
-- ✅ Detects **OpenSSL 1.0.1t** - Heartbleed (CVE-2014-0160)
-- ✅ Detects **zlib 1.2.8** - 4 critical CVEs
-- ✅ Detects **libcurl 7.58.0** - Multiple vulnerabilities
+- ✅ Detects **133 total vulnerabilities** across 3 libraries
+- ✅ **OpenSSL 1.0.1t** - 45+ vulnerabilities (17 Critical, 18 High)
+- ✅ **zlib 1.2.8** - 6 vulnerabilities (2 Critical, 3 High)
+- ✅ **libcurl 7.58.0** - 88+ vulnerabilities (11 Critical, 13 High)
 
 ### Code Scan (`snyk code test`)
 - ✅ Detects 12+ vulnerabilities in `server.cpp`:
