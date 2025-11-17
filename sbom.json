@@ -1,0 +1,74 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.4",
+  "serialNumber": "urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79",
+  "version": 1,
+  "metadata": {
+    "timestamp": "2025-01-17T00:00:00Z",
+    "tools": [
+      {
+        "vendor": "Snyk",
+        "name": "Workshop-App-Demo-Goof-CPP",
+        "version": "1.0.0"
+      }
+    ],
+    "component": {
+      "type": "application",
+      "name": "goof-cpp",
+      "version": "1.0.0",
+      "description": "Workshop App Demo - Goof (C++ Edition) - Deliberately Vulnerable Application"
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "name": "openssl",
+      "version": "1.0.1t",
+      "purl": "pkg:conan/openssl@1.0.1t",
+      "description": "OpenSSL - Contains Heartbleed CVE-2014-0160"
+    },
+    {
+      "type": "library",
+      "name": "zlib",
+      "version": "1.2.8",
+      "purl": "pkg:conan/zlib@1.2.8",
+      "description": "zlib compression library - Contains CVE-2016-9840, CVE-2016-9841, CVE-2016-9842, CVE-2016-9843"
+    },
+    {
+      "type": "library",
+      "name": "libcurl",
+      "version": "7.58.0",
+      "purl": "pkg:conan/libcurl@7.58.0",
+      "description": "libcurl - Contains CVE-2018-1000120, CVE-2018-1000121"
+    },
+    {
+      "type": "library",
+      "name": "boost",
+      "version": "1.69.0",
+      "purl": "pkg:conan/boost@1.69.0",
+      "description": "Boost C++ Libraries"
+    },
+    {
+      "type": "library",
+      "name": "sqlite3",
+      "version": "3.16.0",
+      "purl": "pkg:conan/sqlite3@3.16.0",
+      "description": "SQLite - Contains multiple CVEs"
+    },
+    {
+      "type": "library",
+      "name": "libxml2",
+      "version": "2.9.4",
+      "purl": "pkg:conan/libxml2@2.9.4",
+      "description": "libxml2 - Contains XXE vulnerabilities and other CVEs"
+    },
+    {
+      "type": "library",
+      "name": "jsoncpp",
+      "version": "1.8.4",
+      "purl": "pkg:conan/jsoncpp@1.8.4",
+      "description": "JsonCpp - JSON library for C++"
+    }
+  ]
+}
+

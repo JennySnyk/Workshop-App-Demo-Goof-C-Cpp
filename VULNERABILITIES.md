@@ -131,7 +131,10 @@ snyk code test
 
 ### Snyk Open Source (SCA)
 ```bash
-# Scan Conan dependencies
+# Option 1: Scan SBOM (fastest, no build required)
+snyk test --file=sbom.json
+
+# Option 2: Scan Conan dependencies
 snyk test --file=conanfile.txt
 # or
 snyk test --file=conanfile.py

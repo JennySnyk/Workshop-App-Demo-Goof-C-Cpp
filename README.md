@@ -234,6 +234,8 @@ Unsynchronized access to shared resources.
 
 ## 🔍 Scanning with Snyk
 
+> **📖 For detailed scanning instructions, see [SCANNING.md](SCANNING.md)**
+
 ### Prerequisites for Snyk Scanning
 
 ```bash
@@ -266,15 +268,25 @@ snyk code test --json > sast-results.json
 Scan dependencies for known vulnerabilities:
 
 ```bash
-# Scan C++ dependencies (Conan)
+# Option 1: Scan using Conan files
 snyk test --file=conanfile.txt
-
-# Or scan with conanfile.py
+# or
 snyk test --file=conanfile.py
 
-# Monitor project
+# Option 2: Scan using SBOM (Software Bill of Materials)
+snyk test --sbom
+# or specify the SBOM file explicitly
+snyk test --file=sbom.json
+snyk test --file=sbom.xml
+
+# Option 3: Test individual packages
+snyk test --package-manager=cpp --packages=pkg:conan/openssl@1.0.1t
+
+# Monitor project for continuous monitoring
 snyk monitor --file=conanfile.txt
 ```
+
+**SBOM Scanning**: This project includes pre-generated SBOM files (`sbom.json` and `sbom.xml`) in CycloneDX format with `pkg:conan` identifiers. You can test the SBOM directly with `snyk test --file=sbom.json` for quick vulnerability scanning without building dependencies.
 
 **Expected findings**: This project uses intentionally vulnerable versions with known CVEs:
 
@@ -405,11 +417,18 @@ cd tests
 valgrind --leak-check=full ../build/goof-server
 ```
 
+## 📚 Documentation
+
+- **[SCANNING.md](SCANNING.md)** - Complete guide to scanning this repository with Snyk
+- **[VULNERABILITIES.md](VULNERABILITIES.md)** - Reference of all intentional vulnerabilities
+- **[SECURITY.md](SECURITY.md)** - Security policy and responsible usage
+
 ## 📖 Learning Resources
 
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/)
 - [CWE Top 25](https://cwe.mitre.org/top25/)
 - [Snyk Documentation](https://docs.snyk.io/)
+- [Snyk C/C++ Support](https://docs.snyk.io/supported-languages/supported-languages-list/c-c++)
 - [C++ Secure Coding Guidelines](https://wiki.sei.cmu.edu/confluence/display/cplusplus)
 
 ## 🤝 Contributing

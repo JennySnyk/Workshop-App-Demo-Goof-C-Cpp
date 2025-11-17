@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bom xmlns="http://cyclonedx.org/schema/bom/1.4" serialNumber="urn:uuid:3e671687-395b-41f5-a30f-a58921a69b79" version="1">
+  <metadata>
+    <timestamp>2025-01-17T00:00:00Z</timestamp>
+    <tools>
+      <tool>
+        <vendor>Snyk</vendor>
+        <name>Workshop-App-Demo-Goof-CPP</name>
+        <version>1.0.0</version>
+      </tool>
+    </tools>
+    <component type="application">
+      <name>goof-cpp</name>
+      <version>1.0.0</version>
+      <description>Workshop App Demo - Goof (C++ Edition) - Deliberately Vulnerable Application</description>
+    </component>
+  </metadata>
+  <components>
+    <component type="library">
+      <name>openssl</name>
+      <version>1.0.1t</version>
+      <purl>pkg:conan/openssl@1.0.1t</purl>
+      <description>OpenSSL - Contains Heartbleed CVE-2014-0160</description>
+    </component>
+    <component type="library">
+      <name>zlib</name>
+      <version>1.2.8</version>
+      <purl>pkg:conan/zlib@1.2.8</purl>
+      <description>zlib compression library - Contains CVE-2016-9840, CVE-2016-9841, CVE-2016-9842, CVE-2016-9843</description>
+    </component>
+    <component type="library">
+      <name>libcurl</name>
+      <version>7.58.0</version>
+      <purl>pkg:conan/libcurl@7.58.0</purl>
+      <description>libcurl - Contains CVE-2018-1000120, CVE-2018-1000121</description>
+    </component>
+    <component type="library">
+      <name>boost</name>
+      <version>1.69.0</version>
+      <purl>pkg:conan/boost@1.69.0</purl>
+      <description>Boost C++ Libraries</description>
+    </component>
+    <component type="library">
+      <name>sqlite3</name>
+      <version>3.16.0</version>
+      <purl>pkg:conan/sqlite3@3.16.0</purl>
+      <description>SQLite - Contains multiple CVEs</description>
+    </component>
+    <component type="library">
+      <name>libxml2</name>
+      <version>2.9.4</version>
+      <purl>pkg:conan/libxml2@2.9.4</purl>
+      <description>libxml2 - Contains XXE vulnerabilities and other CVEs</description>
+    </component>
+    <component type="library">
+      <name>jsoncpp</name>
+      <version>1.8.4</version>
+      <purl>pkg:conan/jsoncpp@1.8.4</purl>
+      <description>JsonCpp - JSON library for C++</description>
+    </component>
+  </components>
+</bom>
+

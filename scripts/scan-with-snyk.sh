@@ -48,6 +48,16 @@ echo ""
 # 2. Snyk Open Source (SCA)
 echo "🔍 Running Snyk Open Source (SCA) scan..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# Scan SBOM files
+if [ -f "sbom.json" ]; then
+    echo "Scanning SBOM (sbom.json)..."
+    snyk test --file=sbom.json --json > scan-results/sca-sbom.json || true
+    snyk test --file=sbom.json || true
+    echo ""
+fi
+
+# Scan Conan files
 if [ -f "conanfile.txt" ]; then
     echo "Scanning conanfile.txt..."
     snyk test --file=conanfile.txt --json > scan-results/sca-conanfile-txt.json || true
@@ -62,8 +72,8 @@ if [ -f "conanfile.py" ]; then
     echo ""
 fi
 
-if [ ! -f "conanfile.txt" ] && [ ! -f "conanfile.py" ]; then
-    echo "⚠️  No conanfile.txt or conanfile.py found, skipping SCA scan"
+if [ ! -f "conanfile.txt" ] && [ ! -f "conanfile.py" ] && [ ! -f "sbom.json" ]; then
+    echo "⚠️  No dependency files found, skipping SCA scan"
 fi
 echo ""
 
@@ -99,7 +109,8 @@ echo "Results saved to: scan-results/"
 echo ""
 echo "Expected findings:"
 echo "  📌 SAST: Buffer overflow, format string, command injection, etc."
-echo "  📌 SCA: Vulnerable dependencies (OpenSSL, libcurl, etc.)"
+echo "  📌 SCA (SBOM): OpenSSL Heartbleed, zlib CVEs, libcurl CVEs, etc."
+echo "  📌 SCA (Conan): Same vulnerabilities via conanfile.txt/py"
 echo "  📌 Container: Vulnerable base image, running as root, etc."
 echo "  📌 IaC: Public S3 buckets, open security groups, etc."
 echo ""
