@@ -131,14 +131,14 @@ snyk code test
 
 ### Snyk Open Source (SCA)
 ```bash
-# Option 1: Scan SBOM (fastest, no build required)
-snyk test --file=sbom.json
+# Scan C/C++ dependencies using unmanaged scanning
+snyk test --unmanaged
 
-# Option 2: Scan Conan dependencies
-snyk test --file=conanfile.txt
-# or
-snyk test --file=conanfile.py
+# Scan specific directory
+snyk test --unmanaged --target-dir=deps/
 ```
+
+**Note**: C/C++ scanning uses the `--unmanaged` flag to scan actual source code files in the `deps/` directory. It does NOT use package manager files like `conanfile.txt` or SBOM files.
 
 ### Snyk Container
 ```bash

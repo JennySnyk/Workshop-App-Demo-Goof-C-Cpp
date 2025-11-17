@@ -44,11 +44,14 @@ compile_commands.json
 CTestTestfile.cmake
 _deps/
 
-# Conan
+# Conan (keeping conanfile.* for reference, but not used for Snyk scanning)
 conaninfo.txt
 conanbuildinfo.*
 conan.lock
 graph_info.json
+
+# Note: conanfile.txt and conanfile.py are kept for reference but
+# C/C++ scanning uses --unmanaged flag to scan source files in deps/
 
 # IDEs
 .vscode/

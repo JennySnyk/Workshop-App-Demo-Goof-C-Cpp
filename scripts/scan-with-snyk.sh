@@ -45,36 +45,18 @@ snyk code test --json > scan-results/code-scan.json || true
 snyk code test
 echo ""
 
-# 2. Snyk Open Source (SCA)
-echo "🔍 Running Snyk Open Source (SCA) scan..."
+# 2. Snyk Open Source (SCA) - Unmanaged C/C++ Scanning
+echo "🔍 Running Snyk Open Source (SCA) - Unmanaged C/C++ scan..."
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "Scanning C/C++ source files for vulnerable dependencies..."
+echo ""
 
-# Scan SBOM files
-if [ -f "sbom.json" ]; then
-    echo "Scanning SBOM (sbom.json)..."
-    snyk test --file=sbom.json --json > scan-results/sca-sbom.json || true
-    snyk test --file=sbom.json || true
-    echo ""
-fi
+# Scan with --unmanaged flag (scans actual C/C++ source files)
+snyk test --unmanaged --json > scan-results/sca-unmanaged.json || true
+snyk test --unmanaged || true
 
-# Scan Conan files
-if [ -f "conanfile.txt" ]; then
-    echo "Scanning conanfile.txt..."
-    snyk test --file=conanfile.txt --json > scan-results/sca-conanfile-txt.json || true
-    snyk test --file=conanfile.txt || true
-    echo ""
-fi
-
-if [ -f "conanfile.py" ]; then
-    echo "Scanning conanfile.py..."
-    snyk test --file=conanfile.py --json > scan-results/sca-conanfile-py.json || true
-    snyk test --file=conanfile.py || true
-    echo ""
-fi
-
-if [ ! -f "conanfile.txt" ] && [ ! -f "conanfile.py" ] && [ ! -f "sbom.json" ]; then
-    echo "⚠️  No dependency files found, skipping SCA scan"
-fi
+echo ""
+echo "Note: C/C++ scanning uses --unmanaged flag to scan source files in deps/ directory"
 echo ""
 
 # 3. Snyk Container
@@ -109,8 +91,7 @@ echo "Results saved to: scan-results/"
 echo ""
 echo "Expected findings:"
 echo "  📌 SAST: Buffer overflow, format string, command injection, etc."
-echo "  📌 SCA (SBOM): OpenSSL Heartbleed, zlib CVEs, libcurl CVEs, etc."
-echo "  📌 SCA (Conan): Same vulnerabilities via conanfile.txt/py"
+echo "  📌 SCA (Unmanaged): OpenSSL Heartbleed, zlib CVEs, libcurl CVEs"
 echo "  📌 Container: Vulnerable base image, running as root, etc."
 echo "  📌 IaC: Public S3 buckets, open security groups, etc."
 echo ""

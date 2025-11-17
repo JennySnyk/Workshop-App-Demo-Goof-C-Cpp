@@ -14,53 +14,52 @@ brew install snyk
 snyk auth
 ```
 
-## Quick Start - SBOM Scanning (Recommended for Quick Demos)
+## Quick Start - Unmanaged C/C++ Scanning (Recommended for Demos)
 
-The fastest way to demonstrate Snyk's vulnerability detection is using the pre-generated SBOM:
+The correct way to scan C/C++ dependencies with Snyk is using the `--unmanaged` flag:
 
 ```bash
-# Scan the SBOM file (no build required!)
-snyk test --file=sbom.json
-
-# Or use the XML format
-snyk test --file=sbom.xml
+# Scan C/C++ dependencies (scans source files in deps/ directory)
+snyk test --unmanaged
 ```
 
-**Why use SBOM scanning?**
-- ✅ No need to install Conan or build dependencies
-- ✅ Fast - results in seconds
-- ✅ Perfect for workshops and demos
-- ✅ Shows vulnerabilities in OpenSSL (Heartbleed!), zlib, libcurl, etc.
+**Why use --unmanaged for C/C++?**
+- ✅ Correct method for C/C++ dependency scanning
+- ✅ Scans actual source code files (`.c`, `.cpp`, `.h`)
+- ✅ No need to build - just scans source files
+- ✅ Detects vulnerabilities in OpenSSL (Heartbleed!), zlib, libcurl, etc.
+- ✅ Privacy-focused: Only file hashes sent to Snyk (not source code)
 
 ## Scanning Options
 
-### 1. SBOM Scanning (No Build Required)
+### 1. Unmanaged C/C++ Scanning (Correct Method)
 
 ```bash
-# Test SBOM for vulnerabilities
-snyk test --file=sbom.json
+# Scan C/C++ dependencies
+snyk test --unmanaged
+
+# Scan specific directory
+snyk test --unmanaged --target-dir=deps/
 
 # Save results to JSON
-snyk test --file=sbom.json --json > results.json
+snyk test --unmanaged --json > results.json
 
 # Test with severity threshold
-snyk test --file=sbom.json --severity-threshold=high
-```
-
-### 2. Conan Dependency Scanning
-
-```bash
-# Scan conanfile.txt
-snyk test --file=conanfile.txt
-
-# Scan conanfile.py
-snyk test --file=conanfile.py
+snyk test --unmanaged --severity-threshold=high
 
 # Monitor for continuous tracking
-snyk monitor --file=conanfile.txt
+snyk monitor --unmanaged
 ```
 
-### 3. SAST (Static Application Security Testing)
+**How it works**: 
+- Scans `.c`, `.cpp`, `.h`, `.hpp` files in the current directory and subdirectories
+- Converts files to hashes (privacy-focused - only hashes sent to Snyk)
+- Matches hashes against Snyk's vulnerability database
+- Reports CVEs found in matched library versions
+
+**Note**: C/C++ scanning does NOT use package manager files like `conanfile.txt` or SBOM files. It scans actual source code.
+
+### 2. SAST (Static Application Security Testing)
 
 ```bash
 # Scan C++ source code
@@ -73,7 +72,7 @@ snyk code test --severity-threshold=high
 snyk code test --json > code-results.json
 ```
 
-### 4. Container Scanning
+### 3. Container Scanning
 
 ```bash
 # Build the image first
@@ -86,7 +85,7 @@ snyk container test goof-cpp:latest
 snyk container test goof-cpp:latest --file=Dockerfile
 ```
 
-### 5. Infrastructure as Code
+### 4. Infrastructure as Code
 
 ```bash
 # Scan Terraform files
@@ -114,7 +113,7 @@ Results are saved to `scan-results/` directory.
 
 ## Expected Findings
 
-### SBOM / Conan Dependencies (SCA)
+### C/C++ Dependencies (Unmanaged Scanning)
 
 | Package | Version | Critical CVEs |
 |---------|---------|---------------|
@@ -156,11 +155,11 @@ Results are saved to `scan-results/` directory.
 
 ## Tips for Workshops
 
-### Demo 1: Quick SBOM Scan (5 minutes)
+### Demo 1: Quick Unmanaged Scan (5 minutes)
 ```bash
-snyk test --file=sbom.json
+snyk test --unmanaged
 ```
-Shows immediate value with no setup required!
+Shows C/C++ vulnerability detection with no build required!
 
 ### Demo 2: SAST Code Analysis (10 minutes)
 ```bash
@@ -200,36 +199,35 @@ stage('Snyk Security') {
 ```yaml
 snyk_scan:
   script:
-    - snyk test --file=sbom.json
+    - snyk test --unmanaged
     - snyk code test
 ```
 
 ## Troubleshooting
 
-### SBOM Scanning Issues
+### Unmanaged Scanning Issues
 
-**Q: Getting "No supported projects found"?**
-A: Make sure you're using `--file=sbom.json` explicitly:
+**Q: Getting "Could not detect package manager" error?**
+A: For C/C++, don't use `--file=conanfile.txt`. Use `--unmanaged` instead:
 ```bash
-snyk test --file=sbom.json
+snyk test --unmanaged
 ```
 
-**Q: Want to test a specific package?**
-A: Use the package URL format:
+**Q: "Why did Snyk not find any dependencies?"**
+A: According to the [Snyk C/C++ troubleshooting guide](https://docs.snyk.io/supported-languages/supported-languages-list/c-c++/troubleshooting-c-c++-for-open-source), check:
+1. Source code files (`.c`, `.cpp`, `.h`) are present in the `deps/` directory
+2. Files match official release patterns from open source components
+3. Sufficient number of files are present for Snyk to recognize the library
+4. The Snyk database has been recently updated (updates twice monthly)
+
+**Q: Want to scan only a specific directory?**
+A: Use the `--target-dir` option:
 ```bash
-snyk test --package-manager=cpp --packages=pkg:conan/openssl@1.0.1t
+snyk test --unmanaged --target-dir=deps/openssl-1.0.1t/
 ```
 
-### Conan Scanning Issues
-
-**Q: Conan not found?**
-A: Install Conan first:
-```bash
-pip install conan
-```
-
-**Q: Dependencies not resolving?**
-A: These are intentionally old versions. Some may not be available in default Conan repositories. Use SBOM scanning instead for demos.
+**Q: Is my source code sent to Snyk?**
+A: No! Only file hashes are sent to Snyk servers, not the actual source code. See the [troubleshooting documentation](https://docs.snyk.io/supported-languages/supported-languages-list/c-c++/troubleshooting-c-c++-for-open-source) for details.
 
 ## Documentation References
 

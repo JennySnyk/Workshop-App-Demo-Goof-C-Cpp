@@ -263,40 +263,45 @@ snyk code test --json > sast-results.json
 
 **Expected findings**: Buffer overflow, format string, command injection, SQL injection, use-after-free, null pointer dereference, memory leaks, hardcoded credentials, and more.
 
-### Snyk Open Source (SCA)
+### Snyk Open Source (SCA) - Unmanaged C/C++ Scanning
 
-Scan dependencies for known vulnerabilities:
+**Important**: C/C++ scanning in Snyk uses a different approach than other languages. It scans **actual source code files** of dependencies, not package manager files.
 
 ```bash
-# Option 1: Scan using Conan files
-snyk test --file=conanfile.txt
-# or
-snyk test --file=conanfile.py
+# Scan C/C++ dependencies (default - scans current directory)
+snyk test --unmanaged
 
-# Option 2: Scan using SBOM (Software Bill of Materials)
-snyk test --sbom
-# or specify the SBOM file explicitly
-snyk test --file=sbom.json
-snyk test --file=sbom.xml
+# Scan specific directory containing dependencies
+snyk test --unmanaged --target-dir=deps/
 
-# Option 3: Test individual packages
-snyk test --package-manager=cpp --packages=pkg:conan/openssl@1.0.1t
+# Generate JSON report
+snyk test --unmanaged --json > sca-results.json
 
-# Monitor project for continuous monitoring
-snyk monitor --file=conanfile.txt
+# Only show high/critical severity
+snyk test --unmanaged --severity-threshold=high
+
+# Monitor for continuous tracking
+snyk monitor --unmanaged
 ```
 
-**SBOM Scanning**: This project includes pre-generated SBOM files (`sbom.json` and `sbom.xml`) in CycloneDX format with `pkg:conan` identifiers. You can test the SBOM directly with `snyk test --file=sbom.json` for quick vulnerability scanning without building dependencies.
+**How it works**: The `--unmanaged` flag tells Snyk to:
+1. Scan C/C++ source files (`.c`, `.cpp`, `.h`, `.hpp`)
+2. Convert files to hashes (NOT sent to Snyk servers - only hashes are sent)
+3. Match against Snyk's database of known vulnerable libraries
+4. Report CVEs found in matched library versions
 
-**Expected findings**: This project uses intentionally vulnerable versions with known CVEs:
+**Source files included**: This repository includes source code snippets from vulnerable libraries in the `deps/` directory:
+- `deps/openssl-1.0.1t/` - Contains Heartbleed vulnerability
+- `deps/zlib-1.2.8/` - Contains out-of-bounds vulnerabilities
+- `deps/libcurl-7.58.0/` - Contains FTP and LDAP vulnerabilities
+
+**Expected findings**: 
 
 - **OpenSSL 1.0.1t**: Heartbleed (CVE-2014-0160), CVE-2016-2105, CVE-2016-2106, and more
 - **zlib 1.2.8**: CVE-2016-9840, CVE-2016-9841, CVE-2016-9842, CVE-2016-9843
-- **libcurl 7.58.0**: Multiple security vulnerabilities including CVE-2018-1000120, CVE-2018-1000121
-- **Boost 1.69.0**: Known security issues
-- **SQLite 3.16.0**: Multiple CVEs
-- **libxml2 2.9.4**: XXE vulnerabilities and other CVEs
-- **JsonCpp 1.8.4**: Potential security issues
+- **libcurl 7.58.0**: CVE-2018-1000120 (FTP path trickery), CVE-2018-1000121 (LDAP NULL deref)
+
+For more details, see [deps/README.md](deps/README.md) and the [Snyk C/C++ Troubleshooting Guide](https://docs.snyk.io/supported-languages/supported-languages-list/c-c++/troubleshooting-c-c++-for-open-source).
 
 ### Snyk Container
 
