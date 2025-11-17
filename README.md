@@ -234,7 +234,9 @@ Unsynchronized access to shared resources.
 
 ## 🔍 Scanning with Snyk
 
-> **📖 For detailed scanning instructions, see [SCANNING.md](SCANNING.md)**
+> **🚀 Quick Start: [QUICK-START.md](QUICK-START.md)** | **📖 Detailed Guide: [SCANNING.md](SCANNING.md)**
+>
+> **⚠️ Important**: C/C++ uses `snyk test --unmanaged` (NOT `--file=conanfile.txt`)
 
 ### Prerequisites for Snyk Scanning
 
